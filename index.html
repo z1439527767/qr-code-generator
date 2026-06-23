@@ -1,1 +1,99 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>QR Code Generator - Free Online Tool</title><meta name="description" content="Generate QR codes from any text or URL. Free, instant, browser-side only."><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,sans-serif;background:#0d1117;color:#c9d1d9;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh}main{max-width:500px;text-align:center;padding:40px}h1{color:#58a6ff}.btn{display:inline-block;padding:12px 24px;border-radius:6px;margin:8px;text-decoration:none;font-weight:500}.btn-p{background:#238636;color:#fff}.btn-s{background:#21262d;color:#c9d1d9;border:1px solid #30363d}a{color:#58a6ff}</style></head><body><main><h1>QR Code Generator</h1><p style="color:#8b949e">Generate QR codes from any text or URL. Free, instant, browser-side only.</p><p style="color:#8b949e;margin:20px 0">🛠 <a href="https://z1439527767.github.io/devtoolhub">DevToolHub</a> — all free tools</p><a href="https://zestful572.gumroad.com" class="btn btn-p">💎 Pro Products</a></main></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator - Free Online Tool | DevToolHub</title>
+<meta name="description" content="Free QR code generator. Create QR codes instantly for URLs, text, WiFi, contacts. No ads, no tracking, 100% client-side.">
+<meta name="keywords" content="qr code generator, free qr code, online qr maker">
+<meta name="robots" content="index, follow">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0d1117;color:#c9d1d9;min-height:100vh;display:flex;flex-direction:column}
+header{background:#161b22;border-bottom:1px solid #30363d;padding:14px 24px}
+header .inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:17px;color:#58a6ff}
+header nav a{color:#8b949e;text-decoration:none;font-size:12px;margin-left:18px}
+header nav a:hover{color:#c9d1d9}
+.container{max-width:800px;margin:30px auto;padding:0 24px;flex:1;text-align:center}
+.input-box{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;margin-bottom:20px}
+.input-box label{display:block;font-size:13px;color:#8b949e;margin-bottom:8px;text-align:left}
+.input-box input,.input-box textarea{width:100%;background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;padding:10px 14px;font-size:14px;font-family:inherit}
+.input-box input:focus,.input-box textarea:focus{outline:none;border-color:#58a6ff}
+.input-box textarea{height:100px;resize:vertical}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.btn{padding:8px 20px;border-radius:6px;border:none;cursor:pointer;font-size:13px;font-weight:500}
+.btn-p{background:#238636;color:#fff}.btn-p:hover{background:#2ea043}
+.btn-s{background:#21262d;color:#c9d1d9;border:1px solid #30363d}.btn-s:hover{background:#30363d}
+.type-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;justify-content:center}
+.type-btn{padding:6px 14px;border-radius:20px;border:1px solid #30363d;background:transparent;color:#8b949e;cursor:pointer;font-size:12px}
+.type-btn.active{background:#1f6feb;color:#fff;border-color:#1f6feb}
+.qr-result{padding:20px;display:flex;flex-direction:column;align-items:center;gap:10px}
+#qrcode{background:#fff;padding:16px;border-radius:8px;display:inline-block}
+footer{text-align:center;padding:18px;color:#484f58;font-size:12px;border-top:1px solid #30363d;margin-top:28px}
+footer a{color:#58a6ff;text-decoration:none}
+</style>
+</head>
+<body>
+<header><div class="inner"><h1>📱 QR Code Generator</h1><nav><a href="https://z1439527767.github.io/devtoolhub">🛠 Tools</a><a href="https://zestful572.gumroad.com">💎 Pro</a></nav></div></header>
+<div class="container">
+<div class="type-row"><button class="type-btn active" id="btn-url" data-type="url">🔗 URL</button><button class="type-btn" id="btn-text" data-type="text">📝 Text</button><button class="type-btn" id="btn-wifi" data-type="wifi">📶 WiFi</button><button class="type-btn" id="btn-email" data-type="email">📧 Email</button></div>
+<div class="input-box" id="input-area"></div>
+<div class="btn-row"><button class="btn btn-p" id="gen-btn">✨ Generate QR</button><button class="btn btn-s" id="dl-btn">⬇ Download PNG</button></div>
+<div class="qr-result"><div id="qrcode" style="display:none"></div><p style="font-size:12px;color:#8b949e;margin-top:8px">🔒 Generated entirely in your browser. No data sent anywhere.</p></div>
+</div>
+<footer><p>🛠 <a href="https://z1439527767.github.io/devtoolhub">DevToolHub</a> · 💎 <a href="https://zestful572.gumroad.com/l/ai-dev-toolkit">AI Dev Toolkit</a></p></footer>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js" defer></script>
+<script>
+(function(){
+var t='url';
+function setType(type){
+  t=type;
+  document.querySelectorAll('.type-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('btn-'+type).classList.add('active');
+  var a=document.getElementById('input-area');
+  if(type==='url') a.innerHTML='<label>Enter URL</label><input id="qr-in" type="url" placeholder="https://example.com" value="https://zestful572.gumroad.com">';
+  else if(type==='text') a.innerHTML='<label>Enter Text</label><textarea id="qr-in" placeholder="Enter any text...">Hello from DevToolHub!</textarea>';
+  else if(type==='wifi') a.innerHTML='<label>WiFi SSID</label><input id="qr-ssid" placeholder="Network name"><label style="margin-top:10px">Password</label><input id="qr-pass" type="password" placeholder="WiFi password"><label style="margin-top:10px">Security</label><select id="qr-sec" style="width:100%;background:#0d1117;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;padding:10px;font-size:14px"><option>WPA</option><option>WEP</option><option>nopass</option></select>';
+  else if(type==='email') a.innerHTML='<label>Email Address</label><input id="qr-email" type="email" placeholder="hello@example.com"><label style="margin-top:10px">Subject</label><input id="qr-subj" placeholder="Email subject"><label style="margin-top:10px">Body</label><textarea id="qr-body" placeholder="Email body..." style="height:80px"></textarea>';
+}
+function getQRText(){
+  if(t==='url') return document.getElementById('qr-in')?document.getElementById('qr-in').value:'';
+  if(t==='text') return document.getElementById('qr-in')?document.getElementById('qr-in').value:'';
+  if(t==='wifi'){
+    var ss=document.getElementById('qr-ssid'),ps=document.getElementById('qr-pass'),sc=document.getElementById('qr-sec');
+    return 'WIFI:S:'+(ss?ss.value:'')+';T:'+(sc?sc.value:'WPA')+';P:'+(ps?ps.value:'')+';;';
+  }
+  if(t==='email'){
+    var em=document.getElementById('qr-email'),su=document.getElementById('qr-subj'),bo=document.getElementById('qr-body');
+    return 'mailto:'+(em?em.value:'')+'?subject='+encodeURIComponent(su?su.value:'')+'&body='+encodeURIComponent(bo?bo.value:'');
+  }
+  return '';
+}
+document.getElementById('gen-btn').addEventListener('click',function(){
+  var txt=getQRText();
+  if(!txt){alert('Please enter content');return;}
+  var el=document.getElementById('qrcode');
+  el.style.display='block';el.innerHTML='';
+  if(typeof QRCode !== 'undefined'){
+    QRCode.toCanvas(el,txt,{width:256,margin:2,color:{dark:'#000',light:'#fff'}});
+  } else {
+    el.innerHTML='<p style="color:#8b949e">Loading QR library...</p>';
+    setTimeout(function(){QRCode.toCanvas(el,txt,{width:256,margin:2,color:{dark:'#000',light:'#fff'}})},500);
+  }
+});
+document.getElementById('dl-btn').addEventListener('click',function(){
+  var cv=document.querySelector('#qrcode canvas');
+  if(!cv){alert('Generate a QR code first!');return;}
+  var a=document.createElement('a');a.download='qrcode.png';a.href=cv.toDataURL();a.click();
+});
+document.getElementById('btn-url').addEventListener('click',function(){setType('url')});
+document.getElementById('btn-text').addEventListener('click',function(){setType('text')});
+document.getElementById('btn-wifi').addEventListener('click',function(){setType('wifi')});
+document.getElementById('btn-email').addEventListener('click',function(){setType('email')});
+setType('url');
+setTimeout(function(){document.getElementById('gen-btn').click()},500);
+})();
+</script>
+</body>
+</html>
